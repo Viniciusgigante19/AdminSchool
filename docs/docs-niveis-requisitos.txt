@@ -1,0 +1,121 @@
+1️⃣ Alunos
+
+Acesso seguro:
+
+Login com credenciais individuais.
+
+Visualização de informações pessoais:
+
+Dados do aluno, turma e responsáveis.
+
+Controle financeiro:
+
+Consultar pagamentos realizados e pendentes.
+
+Visualizar boletos ou comprovantes de mensalidade.
+
+Lista clara de quem está devendo.
+
+Atividades pedagógicas:
+
+Visualizar atividades realizadas individualmente e pela turma.
+
+Acessar detalhes de atividades e arquivos anexados (como desenhos ou tarefas).
+
+Controle de presença:
+
+Consultar histórico de frequência diário, semanal e mensal.
+
+ChatBot para suporte:
+
+Obter respostas rápidas sobre pagamentos, presença, atividades e informações gerais da escola.
+
+Receber respostas personalizadas se estiver logado.
+
+Usabilidade:
+
+Interface simples e intuitiva, fácil de navegar mesmo por usuários sem experiência em informática.
+
+2️⃣ Professores
+
+Acesso seguro:
+
+Login com credenciais limitadas às turmas sob sua responsabilidade.
+
+Gerenciamento de turmas e alunos:
+
+Visualizar apenas suas turmas e alunos correspondentes.
+
+Registro de presença:
+
+Marcar presença diária dos alunos.
+
+Consultar histórico de frequência de cada aluno de sua turma.
+
+Gerenciamento de atividades:
+
+Cadastrar atividades pedagógicas para suas turmas.
+
+Associar atividades a alunos ou turmas.
+
+Visualizar atividades por aluno ou turma.
+
+Relatórios:
+
+Gerar relatórios de frequência e atividades de suas turmas.
+
+ChatBot:
+
+Consultar informações relacionadas às suas turmas e alunos.
+
+Usabilidade:
+
+Sistema simples, com telas claras e botões de fácil acesso.
+
+3️⃣ Administradores
+
+Controle completo do sistema:
+
+Acesso a todos os módulos e funcionalidades.
+
+Gestão de usuários:
+
+Criar, editar e excluir contas de alunos, professores e outros administradores.
+
+Gestão de alunos e turmas:
+
+Cadastrar, editar, excluir e associar alunos, professores e turmas.
+
+Controle financeiro:
+
+Registrar manualmente pagamentos e consultar histórico completo.
+
+Gerar boletos ou comprovantes de pagamento para entrega aos pais.
+
+Gerar relatórios financeiros detalhados (recebimentos, inadimplência, histórico).
+
+Gestão de atividades:
+
+Cadastrar, editar, excluir e consultar atividades de qualquer turma ou aluno.
+
+Controle de presenças:
+
+Registrar ou corrigir presenças de qualquer aluno.
+
+Gerar relatórios de frequência completos.
+
+ChatBot:
+
+Configurar integração, manutenção e monitoramento do ChatBot.
+
+Analisar interações e melhorar respostas.
+
+Segurança e compatibilidade:
+
+Garantir proteção dos dados de alunos e pagamentos.
+
+Sistema funcional em computadores comuns da escola.
+
+Usabilidade:
+
+Interface clara e intuitiva, acessível para administradores e professores sem experiência técnica.

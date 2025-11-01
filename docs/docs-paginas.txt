@@ -1,0 +1,156 @@
+1️⃣ Estrutura Geral do Sistema
+
+Login (/)
+
+Tela inicial de login
+
+Apenas campos de usuário e senha
+
+Usuários comuns não veem nada sensível
+
+Admins depois do login têm acesso ao menu completo
+
+Dashboard (/dashboard)
+
+Página inicial após login
+
+Menu lateral ou topo com:
+
+Foto de perfil + nome + nível de acesso
+
+Links para cada módulo: Pagamentos, Presenças, Atividades, Usuários (para admins)
+
+Cards de resumo (ex.: pagamentos pendentes, presenças do dia, próximas atividades)
+
+2️⃣ Segmentação por módulos e URLs
+🔹 Pagamentos
+
+/dashboard/payments
+
+Lista de alunos e status de pagamentos
+
+Resumo financeiro
+
+/dashboard/payments/:studentId
+
+Detalhes do aluno
+
+Histórico de pagamentos
+
+Registro manual de pagamento
+
+/dashboard/payments/reports
+
+Relatórios financeiros (recebimentos, inadimplência, etc.)
+
+Ações críticas:
+
+Alterar valores → exige autenticação dupla (2FA ou aprovação)
+
+🔹 Presenças
+
+/dashboard/attendance
+
+Registro diário de presença
+
+/dashboard/attendance/:studentId
+
+Frequência por aluno
+
+/dashboard/attendance/reports
+
+Relatórios de presença (diário, semanal, mensal)
+
+🔹 Atividades
+
+/dashboard/activities
+
+Lista de atividades cadastradas
+
+/dashboard/activities/:activityId
+
+Detalhes da atividade
+
+Associar a alunos ou turmas
+
+/dashboard/activities/reports
+
+Relatórios por turma ou período
+
+Opcional: upload de fotos ou arquivos da atividade
+
+🔹 Usuários / Admin
+
+/dashboard/users
+
+Listagem de usuários (apenas para admin)
+
+/dashboard/users/create
+
+Criação de usuário, só por outro admin autorizado
+
+Definição de nível de acesso
+
+/dashboard/users/:userId
+
+Visualização / edição de permissões
+
+Operações críticas exigem senha + aprovação
+
+🔹 ChatBot
+
+/dashboard/chatbot
+
+Interface de chat
+
+Respostas baseadas em módulo (Pagamentos, Presenças, Atividades)
+
+Disponível 24/7
+
+Transferência para atendente humano se necessário
+
+3️⃣ Observações de navegação
+
+Menu lateral/topo:
+
+Dinâmico: mostra opções conforme nível de acesso
+
+Foto do usuário, nome e nível
+
+Destaques para ações críticas (ex.: alterar boleto)
+
+Controle de acesso:
+
+Rotas protegidas → middleware ou HOC verifica nível antes de renderizar
+
+Admins têm acesso a mais rotas; usuários comuns só veem suas funcionalidades
+
+URLs intuitivas:
+
+/dashboard/module → lista ou visão geral do módulo
+
+/dashboard/module/:id → detalhes ou registro
+
+/dashboard/module/reports → relatórios
+
+4️⃣ Próximo passo sugerido para você (frontend)
+
+Criar estrutura de rotas e layout do Dashboard:
+
+Menu lateral / topo
+
+Área de conteúdo principal
+
+Card de perfil com foto, nome e nível
+
+Criar páginas vazias (stubs) para cada módulo:
+
+/dashboard/payments
+
+/dashboard/attendance
+
+/dashboard/activities
+
+/dashboard/users
+
+/dashboard/chatbot

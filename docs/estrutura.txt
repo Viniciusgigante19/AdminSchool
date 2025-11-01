@@ -1,0 +1,50 @@
+/ (Login)
+│
+├─ Tela inicial de login
+│   ├─ Campos: usuário, senha
+│   └─ Usuário comum → sem acesso a módulos sensíveis
+│
+└─ /dashboard
+    │
+    ├─ Dashboard (página inicial)
+    │   ├─ Menu lateral/topo
+    │   │   ├─ Foto de perfil + nome + nível
+    │   │   └─ Links para módulos
+    │   └─ Cards de resumo (pagamentos pendentes, presenças, próximas atividades)
+    │
+    ├─ /dashboard/payments
+    │   ├─ Lista de alunos + status de pagamentos
+    │   ├─ Resumo financeiro
+    │   ├─ /dashboard/payments/:studentId
+    │   │   ├─ Detalhes do aluno
+    │   │   ├─ Histórico de pagamentos
+    │   │   └─ Registro manual de pagamento
+    │   └─ /dashboard/payments/reports
+    │       └─ Relatórios financeiros (recebimentos, inadimplência, etc.)
+    │
+    ├─ /dashboard/attendance
+    │   ├─ Registro diário de presença
+    │   ├─ /dashboard/attendance/:studentId
+    │   │   └─ Frequência por aluno
+    │   └─ /dashboard/attendance/reports
+    │       └─ Relatórios de presença (diário, semanal, mensal)
+    │
+    ├─ /dashboard/activities
+    │   ├─ Lista de atividades cadastradas
+    │   ├─ /dashboard/activities/:activityId
+    │   │   ├─ Detalhes da atividade
+    │   │   └─ Associar a alunos ou turmas
+    │   └─ /dashboard/activities/reports
+    │       └─ Relatórios por turma ou período
+    │
+    ├─ /dashboard/users (apenas admins)
+    │   ├─ Listagem de usuários
+    │   ├─ /dashboard/users/create
+    │   │   └─ Criação de usuário (apenas admin autorizado)
+    │   └─ /dashboard/users/:userId
+    │       └─ Visualização / edição de permissões
+    │
+    └─ /dashboard/chatbot
+        ├─ Interface de chat
+        ├─ Respostas baseadas em módulo
+        └─ Transferência para atendente humano se necessário

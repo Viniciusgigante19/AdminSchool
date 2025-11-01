@@ -1,0 +1,96 @@
+┌─────────────────────┐
+│ 1️⃣ Aluno           │
+├─────────────────────┤
+│ id (PK)             │
+│ nome                │
+│ data_nascimento     │
+│ cpf                 │
+│ responsavel_nome    │
+│ responsavel_telefone│
+│ responsavel_email   │
+└─────────────────────┘
+
+┌─────────────────────┐
+│ 2️⃣ Professor       │
+├─────────────────────┤
+│ id (PK)             │
+│ nome                │
+│ cpf                 │
+│ email               │
+│ telefone            │
+└─────────────────────┘
+
+┌─────────────────────┐
+│ 3️⃣ Administrador    │
+├─────────────────────┤
+│ id (PK)             │
+│ nome                │
+│ email               │
+│ senha               │
+│ nivel_acesso        │
+└─────────────────────┘
+
+┌─────────────────────┐
+│ 4️⃣ Turma           │
+├─────────────────────┤
+│ id (PK)             │
+│ nome                │
+│ serie               │
+│ ano_letivo          │
+│ capacidade          │
+└─────────────────────┘
+
+┌─────────────────────┐
+│ 5️⃣ Atividade       │
+├─────────────────────┤
+│ id (PK)             │
+│ titulo              │
+│ descricao           │
+│ data_entrega        │
+│ arquivo_anexo       │
+└─────────────────────┘
+
+┌─────────────────────┐
+│ 6️⃣ Presença         │
+├─────────────────────┤
+│ id (PK)             │
+│ aluno_id (FK→Aluno) │
+│ turma_id (FK→Turma) │
+│ data                │
+│ status              │
+│ justificativa       │
+└─────────────────────┘
+
+┌─────────────────────┐
+│ 7️⃣ Pagamento       │
+├─────────────────────┤
+│ id (PK)             │
+│ aluno_id (FK→Aluno) │
+│ turma_id (FK→Turma) │
+│ valor               │
+│ data_vencimento     │
+│ data_pagamento      │
+│ status              │
+│ tipo_mensalidade    │
+└─────────────────────┘
+
+┌─────────────────────────┐
+│ 8️⃣ Usuário / Login      │
+├─────────────────────────┤
+│ id (PK)                 │
+│ username                │
+│ senha                   │
+│ tipo_usuario            │
+│ nivel_acesso            │
+│ status                  │
+└─────────────────────────┘
+
+┌─────────────────────────┐
+│ 9️⃣ ChatBot              │
+├─────────────────────────┤
+│ id (PK)                 │
+│ usuario_id (FK→Usuario) │
+│ mensagem                │
+│ resposta                │
+│ data_hora               │
+└─────────────────────────┘
