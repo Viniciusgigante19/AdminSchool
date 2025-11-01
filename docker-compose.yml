@@ -1,0 +1,14 @@
+services:
+  next-app:
+    build:
+      context: .
+      dockerfile: docker/node-next/DockerFile
+    ports:
+      - "3000:3000"
+    volumes:
+     - .:/app
+     - /app/node_modules
+    environment:
+      NODE_ENV: development
+    restart: unless-stopped
+    command: npm run dev
