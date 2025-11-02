@@ -2,13 +2,13 @@ services:
   next-app:
     build:
       context: .
-      dockerfile: docker/node-next/DockerFile
+      dockerfile: docker/vite-image/DockerFile
     ports:
-      - "3000:3000"
+      - "5173:5173"
     volumes:
      - .:/app
      - /app/node_modules
     environment:
       NODE_ENV: development
     restart: unless-stopped
-    command: npm run dev
+    command: npm run dev -- --host 0.0.0.0
