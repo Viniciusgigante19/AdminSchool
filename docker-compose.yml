@@ -1,14 +1,30 @@
 services:
-  next-app:
+  vite-app:
     build:
       context: .
       dockerfile: docker/vite-image/DockerFile
-    ports:
-      - "5173:5173"
     volumes:
-     - .:/app
-     - /app/node_modules
+      - .:/app
+      - /app/node_modules
     environment:
       NODE_ENV: development
     restart: unless-stopped
-    command: npm run dev -- --host 0.0.0.0
+    expose:
+      - "5173"
+    networks:
+      - app-network
+
+  nginx:
+    build:
+      context: .
+      dockerfile: docker/nginx/DockerFile
+    ports:
+      - "5173:80"
+    depends_on:
+      - vite-app
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
