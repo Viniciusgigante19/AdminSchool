@@ -25,6 +25,23 @@ services:
     networks:
       - app-network
 
+  postgres-container:
+    image: postgres:17
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "6789:5432"
+    volumes:
+      - pgdata-project-volume:/var/lib/postgresql/data
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d
+    networks:
+      app-network:
+        aliases:
+          - postgres_host
+
 networks:
   app-network:
     driver: bridge
