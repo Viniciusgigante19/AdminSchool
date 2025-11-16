@@ -5,7 +5,7 @@ services:
       dockerfile: docker/vite-image/DockerFile
     volumes:
       - .:/app
-      - /app/node_modules
+      - nodemodules-project-volume:/app/node_modules
     environment:
       NODE_ENV: development
     restart: unless-stopped
@@ -46,6 +46,9 @@ services:
     build:
       context: .
       dockerfile: docker/api-node/DockerFile
+    volumes:
+        - .:/app
+        - nodemodules-project-volume:/app/node_modules
     depends_on:
       - postgres-service
     networks:
@@ -57,4 +60,4 @@ networks:
 
 volumes:
   pgdata-project-volume:
-  vite-node-modules: 
+  nodemodules-project-volume:

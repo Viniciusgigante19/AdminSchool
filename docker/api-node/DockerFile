@@ -1,12 +1,14 @@
-# Base Node
 FROM node:20
 
 WORKDIR /app
 
-COPY docker/api-node/package.json ./  
+# Copia apenas package.json para permitir cache de build
+COPY package.json package-lock.json* ./
 
+# Instala dependências (vai instalar dentro do volume se ele existir no compose)
 RUN npm install
 
+# Agora copia o restante do código
 COPY . .
 
 EXPOSE 3000
