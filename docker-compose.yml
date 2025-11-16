@@ -25,7 +25,7 @@ services:
     networks:
       - app-network
 
-  postgres-container:
+  postgres-service:
     image: postgres:17
     restart: unless-stopped
     environment:
@@ -42,6 +42,19 @@ services:
         aliases:
           - postgres_host
 
+  api-node:
+    build:
+      context: .
+      dockerfile: docker/api-node/DockerFile
+    depends_on:
+      - postgres-service
+    networks:
+      - app-network
+
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  pgdata-project-volume:
+  vite-node-modules: 
