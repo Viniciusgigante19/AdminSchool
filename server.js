@@ -1,9 +1,23 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import { sequelize } from './config/sequelize.js';
 
 dotenv.config();
 const app = express();
 
-const PORT = process.env.NODE_PORT || 3000;
+async function startServer() {
+    try {
+        await sequelize.authenticate();
+        console.log('Conexão com banco estabelecida.');
 
-app.listen(PORT,console.log("O app esta ouvindo em 3000 no server.js!"))
+        const PORT = process.env.NODE_PORT || 3000;
+
+        app.listen(PORT, () => {
+            console.log(`O app está ouvindo na porta ${PORT}!`);
+        });
+    } catch (error) {
+        console.error('Erro ao criar servidor:', error.message);
+    }
+}
+
+startServer();

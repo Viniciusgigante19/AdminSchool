@@ -41,16 +41,29 @@ services:
       app-network:
         aliases:
           - postgres_host
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   api-node:
     build:
       context: .
       dockerfile: docker/api-node/DockerFile
     volumes:
-        - .:/app
-        - nodemodules-project-volume:/app/node_modules
+      - .:/app
+      - nodemodules-project-volume:/app/node_modules
+    environment:
+      DB_HOST: postgres_host
+      DB_PORT: "5432"
+      DB_USER: ${POSTGRES_USER}
+      DB_PASS: ${POSTGRES_PASSWORD}
+      DB_NAME: ${POSTGRES_DB}
+      NODE_PORT: ${NODE_PORT}
     depends_on:
-      - postgres-service
+      postgres-service:
+        condition: service_healthy
     networks:
       - app-network
 
