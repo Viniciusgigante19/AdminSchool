@@ -1,9 +1,13 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import { sequelize } from './config/sequelize.js';
+import routes from './routes/index.js';
 
 dotenv.config();
 const app = express();
+
+app.use(express.json()); // Lê req.body
+app.use(routes);
 
 async function startServer() {
     try {
