@@ -1,0 +1,19 @@
+# docker/vite-image/DockerFile
+
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copia package.json e package-lock.json para aproveitar cache do build
+COPY ../../package.json ../../package-lock.json* ./
+
+# Instala dependências (vai cair no volume se ele estiver mapeado)
+RUN npm install
+
+# Copia o resto do código do Vite
+COPY . .
+
+EXPOSE 5173
+
+# Rodar o Vite acessível externamente
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]

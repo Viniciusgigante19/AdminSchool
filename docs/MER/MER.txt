@@ -1,0 +1,34 @@
+Entidade1               Relacionamento             Entidade2
+------------------------------------------------------------
+Aluno                  (n-1)                     Usuario/Login
+Aluno                  (n-1)                     Turma
+Aluno                  (n-n)                     Atividade (Aluno_Atividade)
+Aluno                  (1-n)                     Presença
+Aluno                  (1-n)                     Pagamento
+Aluno                  (1-n)                     ChatBot
+
+Professor              (1-n)                     Turma
+Professor              (1-n)                     Atividade (criada)
+Professor              (1-n)                     Presença (registrada)
+
+Administrador          (1-n)                     Usuario/Aluno/Professor/Outro
+Administrador          (1-n)                     Turma
+Administrador          (1-n)                     Atividade
+Administrador          (1-n)                     Pagamento
+Administrador          (1-n)                     Alteracao_Admin (Auditoria)
+
+Turma                  (1-n)                     Aluno (Aluno_Turma_Historico)
+Turma                  (1-n)                     Atividade (Atividade_Turma)
+Turma                  (1-1)                     Professor
+
+Atividade              (1-n)                     Aluno (Aluno_Atividade)
+Atividade              (n-n)                     Turma (Atividade_Turma)
+
+Presença               (n-1)                     Aluno
+Presença               (n-1)                     Turma
+
+Pagamento              (n-1)                     Aluno
+Pagamento              (n-1)                     Turma
+Pagamento              (n-1)                     Administrador (alteração manual)
+
+ChatBot                (n-1)                     Usuario
