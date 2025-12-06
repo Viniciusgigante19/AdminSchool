@@ -1,74 +1,71 @@
 import express from 'express';
 import db from '../../database/models/index.js';
+import { broadcast } from '../../server.js';
 
 const router = express.Router();
 
-// GET /pagamentos - lista todos os pagamentos
+// LISTAR
 router.get('/', async (req, res) => {
   try {
-    const pagamentos = await db.Pagamento.findAll();
-    res.json(pagamentos);
+    const itens = await db.Pagamento.findAll();
+    res.json(itens);
   } catch (error) {
-    console.error('Erro ao buscar pagamentos:', error);
-    res.status(500).json({ error: 'Erro ao buscar pagamentos', details: error.message });
+    res.status(500).json({ error: 'Erro ao buscar pagamentos' });
   }
 });
 
-// GET /pagamentos/:id - busca pagamento por ID
+// LISTAR POR ID
 router.get('/:id', async (req, res) => {
   try {
-    const pagamento = await db.Pagamento.findByPk(req.params.id);
-    if (pagamento) {
-      res.json(pagamento);
-    } else {
-      res.status(404).json({ error: 'Pagamento não encontrado' });
-    }
+    const item = await db.Pagamento.findByPk(req.params.id);
+    item ? res.json(item) : res.status(404).json({ error: 'Pagamento não encontrado' });
   } catch (error) {
-    console.error('Erro ao buscar pagamento por ID:', error);
-    res.status(500).json({ error: 'Erro ao buscar pagamento', details: error.message });
+    res.status(500).json({ error: 'Erro ao buscar pagamento' });
   }
 });
 
-// POST /pagamentos - cria novo pagamento
+// CRIAR
 router.post('/', async (req, res) => {
   try {
-    const novoPagamento = await db.Pagamento.create(req.body);
-    res.status(201).json(novoPagamento);
+    const novo = await db.Pagamento.create(req.body);
+
+    broadcast({ type: 'pagamento_criado', data: novo });
+
+    res.status(201).json(novo);
   } catch (error) {
-    console.error('Erro ao criar pagamento:', error);
-    res.status(400).json({ error: 'Erro ao criar pagamento', details: error.message });
+    res.status(400).json({ error: 'Erro ao criar pagamento' });
   }
 });
 
-// PUT /pagamentos/:id - atualiza pagamento
+// ATUALIZAR
 router.put('/:id', async (req, res) => {
   try {
-    const pagamento = await db.Pagamento.findByPk(req.params.id);
-    if (pagamento) {
-      await pagamento.update(req.body);
-      res.json(pagamento);
-    } else {
-      res.status(404).json({ error: 'Pagamento não encontrado' });
-    }
+    const item = await db.Pagamento.findByPk(req.params.id);
+    if (!item) return res.status(404).json({ error: 'Pagamento não encontrado' });
+
+    await item.update(req.body);
+
+    broadcast({ type: 'pagamento_atualizado', data: item });
+
+    res.json(item);
   } catch (error) {
-    console.error('Erro ao atualizar pagamento:', error);
-    res.status(400).json({ error: 'Erro ao atualizar pagamento', details: error.message });
+    res.status(400).json({ error: 'Erro ao atualizar pagamento' });
   }
 });
 
-// DELETE /pagamentos/:id - remove pagamento
+// DELETAR
 router.delete('/:id', async (req, res) => {
   try {
-    const pagamento = await db.Pagamento.findByPk(req.params.id);
-    if (pagamento) {
-      await pagamento.destroy();
-      res.status(204).send();
-    } else {
-      res.status(404).json({ error: 'Pagamento não encontrado' });
-    }
+    const item = await db.Pagamento.findByPk(req.params.id);
+    if (!item) return res.status(404).json({ error: 'Pagamento não encontrado' });
+
+    await item.destroy();
+
+    broadcast({ type: 'pagamento_deletado', id: item.id });
+
+    res.status(204).send();
   } catch (error) {
-    console.error('Erro ao deletar pagamento:', error);
-    res.status(500).json({ error: 'Erro ao deletar pagamento', details: error.message });
+    res.status(500).json({ error: 'Erro ao deletar pagamento' });
   }
 });
 

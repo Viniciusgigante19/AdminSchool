@@ -1,30 +1,52 @@
 // /src/pages/StudentDashboard.tsx
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import StudentSidebar from "./components/Layout/StudentSidebar"; // ajuste o caminho conforme Vite
+import StudentSidebar from "./components/Layout/StudentSidebar";
 
 export default function StudentDashboard() {
-  const user = {
-    name: "Ana Souza Bueno",
-    role: "Student",
-    avatar: "https://i.pravatar.cc/150?img=15",
-  };
+  // Estado do usuário logado
+  const [user, setUser] = useState<any>(null);
 
-  const presenceSummary = {
-    today: "Presente",
-    weekPercent: 92,
-    monthPercent: 95,
-  };
+  // Estados para resumos
+  const [presenceSummary, setPresenceSummary] = useState<any>(null);
+  const [paymentsSummary, setPaymentsSummary] = useState<any>(null);
+  const [recentActivities, setRecentActivities] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const paymentsSummary = {
-    pending: 1,
-    lastPaymentDate: "2025-09-05",
-  };
+  // useEffect para buscar dados da API
+  useEffect(() => {
+    async function fetchDashboardData() {
+      try {
+        // Recupera usuário do localStorage (salvo no login)
+        const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
+        setUser(storedUser);
 
-  const recentActivities = [
-    { id: "a1", title: "Desenho: Animais da fazenda", date: "2025-10-10" },
-    { id: "a2", title: "Atividade: Contar até 20", date: "2025-10-08" },
-    { id: "a3", title: "Trabalho em grupo: Plantas", date: "2025-10-02" },
-  ];
+        // Exemplo de chamadas à API
+        const [presRes, payRes, actRes] = await Promise.all([
+          fetch(`http://localhost:3000/api/alunos/${storedUser.id}/presencas`),
+          fetch(`http://localhost:3000/api/alunos/${storedUser.id}/pagamentos`),
+          fetch(`http://localhost:3000/api/alunos/${storedUser.id}/atividades`),
+        ]);
+
+        const presData = await presRes.json();
+        const payData = await payRes.json();
+        const actData = await actRes.json();
+
+        setPresenceSummary(presData);
+        setPaymentsSummary(payData);
+        setRecentActivities(actData);
+      } catch (err) {
+        console.error("Erro ao carregar dados do dashboard:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchDashboardData();
+  }, []);
+
+  if (loading) return <p className="p-8">Carregando dados...</p>;
+  if (!user) return <p className="p-8">Usuário não encontrado</p>;
 
   return (
     <div className="flex min-h-screen bg-gray-100">
@@ -42,98 +64,37 @@ export default function StudentDashboard() {
           {/* Card: Presenças */}
           <Link to="/dashboard/student/attendance" className="block">
             <article className="bg-white shadow rounded-lg p-6 hover:shadow-lg transition">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold">Presenças</h3>
-                <span className="text-sm text-gray-500">Último</span>
-              </div>
-
-              <div className="mt-4">
-                <p className="text-sm text-gray-600 mb-2">
-                  Hoje: <span className="font-medium">{presenceSummary.today}</span>
-                </p>
-                <p className="text-sm text-gray-600">
-                  Semana: <span className="font-medium">{presenceSummary.weekPercent}%</span>
-                </p>
-                <p className="text-sm text-gray-600">
-                  Mês: <span className="font-medium">{presenceSummary.monthPercent}%</span>
-                </p>
-              </div>
-
-              <div className="mt-4">
-                <span className="inline-block text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded">
-                  Ver detalhes
-                </span>
-              </div>
+              <h3 className="text-lg font-semibold">Presenças</h3>
+              <p>Hoje: {presenceSummary?.today}</p>
+              <p>Semana: {presenceSummary?.weekPercent}%</p>
+              <p>Mês: {presenceSummary?.monthPercent}%</p>
             </article>
           </Link>
 
           {/* Card: Atividades */}
           <Link to="/dashboard/student/activities" className="block">
             <article className="bg-white shadow rounded-lg p-6 hover:shadow-lg transition">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold">Atividades</h3>
-                <span className="text-sm text-gray-500">{recentActivities.length} recentes</span>
-              </div>
-
-              <div className="mt-4">
-                <ul className="text-sm text-gray-700 space-y-2">
-                  {recentActivities.slice(0, 3).map((a) => (
-                    <li key={a.id} className="flex justify-between">
-                      <span>{a.title}</span>
-                      <span className="text-gray-400 text-xs">{a.date}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="mt-4">
-                <span className="inline-block text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded">
-                  Ver todas
-                </span>
-              </div>
+              <h3 className="text-lg font-semibold">Atividades</h3>
+              <ul className="text-sm text-gray-700 space-y-2">
+                {recentActivities.slice(0, 3).map((a) => (
+                  <li key={a.id} className="flex justify-between">
+                    <span>{a.titulo}</span>
+                    <span className="text-gray-400 text-xs">{a.data_entrega}</span>
+                  </li>
+                ))}
+              </ul>
             </article>
           </Link>
 
           {/* Card: Pagamentos */}
           <Link to="/dashboard/student/payments" className="block">
             <article className="bg-white shadow rounded-lg p-6 hover:shadow-lg transition">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold">Pagamentos</h3>
-                <span className="text-sm text-gray-500">Status</span>
-              </div>
-
-              <div className="mt-4">
-                <p className="text-sm text-gray-600 mb-1">
-                  Pendentes:{" "}
-                  <span className="font-medium text-red-600">{paymentsSummary.pending}</span>
-                </p>
-                <p className="text-sm text-gray-600">
-                  Último pagamento:{" "}
-                  <span className="font-medium">{paymentsSummary.lastPaymentDate}</span>
-                </p>
-              </div>
-
-              <div className="mt-4">
-                <span className="inline-block text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded">
-                  Ver boletos
-                </span>
-              </div>
+              <h3 className="text-lg font-semibold">Pagamentos</h3>
+              <p>Pendentes: {paymentsSummary?.pendentes}</p>
+              <p>Último pagamento: {paymentsSummary?.ultimoPagamento}</p>
             </article>
           </Link>
         </section>
-
-        {/* ChatBot */}
-        <div className="mt-8 bg-white shadow rounded-lg p-6">
-          <div className="flex items-center justify-between">
-            <h3 className="text-xl font-semibold mb-2">ChatBot</h3>
-            <Link to="/dashboard/student/chatbot" className="text-sm text-blue-600">
-              Abrir
-            </Link>
-          </div>
-          <p className="text-gray-500 mt-2">
-            Tire dúvidas rápidas sobre pagamentos, presença e atividades.
-          </p>
-        </div>
       </main>
     </div>
   );

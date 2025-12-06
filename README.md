@@ -46,15 +46,77 @@ docker compose exec api-node npm run migrate
 
 docker compose exec api-node npm run seed
 
-# comandos úteis se necessário 
- - apagar banco: docker compose exec api-node npx sequelize-cli db:drop
- - criar banco: docker compose exec api-node npx sequelize-cli db:create
- - executar migration e seeds novamente
+# comandos úteis se as migrations ou seeds falharem: 
+ - APAGAR DB: docker compose exec api-node npx sequelize-cli db:drop
+ - CRIAR DB: docker compose exec api-node npx sequelize-cli db:create
+ - PASSO NECESSÁRIO: executar migration e seeds novamente
 
 
-As rotas estão todas em routes/index.js
-exemplo no terminal: 
-curl http://localhost:3000/alunos
-curl http://localhost:3000/alunos/2
-curl http://localhost:3000/chatbot
-curl http://localhost:3000/professores
+
+
+## nginx server
+ - http://localhost:5173/login
+ - http://localhost:5173/dashboard/student
+ - http://localhost:5173/dashboard/admin
+
+## api-node
+ - http://localhost:3000/api
+
+
+
+# Exemplo CRUD no terminal (bash): 
+# GET - todos os alunos
+curl http://localhost:3000/api/alunos
+
+# GET - aluno por ID
+curl http://localhost:3000/api/alunos/2
+
+# POST - criar aluno
+curl -X POST http://localhost:3000/api/alunos \
+-H "Content-Type: application/json" \
+-d '{
+  "nome":"Maria",
+  "cpf":"12345678900",
+  "responsavel_nome":"João",
+  "responsavel_email":"joao@email.com"
+}'
+
+# PUT - atualizar aluno por ID
+curl -X PUT http://localhost:3000/api/alunos/2 \
+-H "Content-Type: application/json" \
+-d '{
+  "nome":"Maria Silva"
+}'
+
+# DELETE - remover aluno por ID
+curl -X DELETE http://localhost:3000/api/alunos/2
+
+
+===========================================================
+
+
+# GET - todos os usuários
+curl http://localhost:3000/api/usuarios
+
+# GET - usuário por ID
+curl http://localhost:3000/api/usuarios/1
+
+# POST - criar usuário
+curl -X POST http://localhost:3000/api/usuarios \
+-H "Content-Type: application/json" \
+-d '{
+  "username":"wagner",
+  "senha":"123456",
+  "tipo_usuario":"administrador",
+  "nivel_acesso":"admin"
+}'
+
+# PUT - atualizar usuário por ID
+curl -X PUT http://localhost:3000/api/usuarios/1 \
+-H "Content-Type: application/json" \
+-d '{
+  "status":"inativo"
+}'
+
+# DELETE - remover usuário por ID
+curl -X DELETE http://localhost:3000/api/usuarios/1
