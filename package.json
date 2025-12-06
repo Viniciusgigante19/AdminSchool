@@ -15,8 +15,10 @@
     "reset-db": "sequelize-cli db:migrate:undo:all && sequelize-cli db:migrate && sequelize-cli db:seed:all"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "17.2.3",
     "express": "5.1.0",
+    "jsonwebtoken": "^9.0.3",
     "pg": "^8.12.0",
     "pg-hstore": "^2.3.4",
     "react": "^19.1.1",

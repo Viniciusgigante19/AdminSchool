@@ -1,5 +1,3 @@
-// src/pages/index.tsx
-// uso de useState para capturar os dados de login
 import { useState } from "react";
 
 export default function LoginPage() {
@@ -21,9 +19,13 @@ export default function LoginPage() {
       if (response.ok) {
         alert("Login bem-sucedido!");
         console.log("Usuário autenticado:", data);
-        // 👉 aqui você pode salvar token no localStorage e redirecionar para o dashboard
-        // localStorage.setItem("token", data.token);
-        // window.location.href = "/dashboard/admin";
+
+        // 👉 salvar token no localStorage
+        if (data.token) {
+          localStorage.setItem("token", data.token);
+        }
+
+        // 👉 redirecionar para o dashboard correto
         if (data.tipo_usuario === "administrador") {
           window.location.href = "/Dashboard/admin";
         } else if (data.tipo_usuario === "professor") {
@@ -31,7 +33,6 @@ export default function LoginPage() {
         } else if (data.tipo_usuario === "aluno") {
           window.location.href = "/Dashboard/student";
         }
-
       } else {
         alert(data.error || "Falha no login");
       }
@@ -87,4 +88,3 @@ export default function LoginPage() {
     </div>
   );
 }
-

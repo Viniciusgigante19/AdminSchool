@@ -1,14 +1,16 @@
 import express from 'express';
+import corsConfig from "./config/corsConfig.js";
 import dotenv from 'dotenv';
-import http from "http";               // <-- IMPORTANTE
-import { WebSocketServer } from "ws";   // <-- IMPORTANTE
+import http from "http";
+import { WebSocketServer } from "ws";
 import { sequelize } from './config/sequelize.js';
-import routes from './routes/index.js';
+import routes from './routes/routes.js';
 
 dotenv.config();
 const app = express();
 
 app.use(express.json());
+app.use(corsConfig);
 app.use(routes);
 
 // --- CRIAR SERVIDOR HTTP (necessário para WebSocket) ---
@@ -17,48 +19,64 @@ const server = http.createServer(app);
 // --- CRIAR SERVIDOR WEBSOCKET ---
 const wss = new WebSocketServer({ server });
 
-// Evento quando alguém conecta
-wss.on("connection", (ws) => {
-    console.log("Cliente WebSocket conectado!");
-
-    ws.send(JSON.stringify({
-        type: "connected",
-        message: "WebSocket conectado com sucesso!"
-    }));
-
-    ws.on("message", (msg) => {
-        console.log("Mensagem recebida do cliente:", msg.toString());
-    });
-
-    ws.on("close", () => {
-        console.log("Cliente WebSocket desconectado");
-    });
-});
-
-// --- FUNÇÃO BROADCAST PARA ENVIAR EVENTOS A TODOS OS CLIENTES ---
+// Função broadcast
 export const broadcast = (data) => {
-    wss.clients.forEach((client) => {
-        if (client.readyState === 1) {
-            client.send(JSON.stringify(data));
-        }
-    });
+  wss.clients.forEach((client) => {
+    if (client.readyState === 1) {
+      client.send(JSON.stringify(data));
+    }
+  });
 };
 
-async function startServer() {
-    try {
-        await sequelize.authenticate();
-        console.log('Conexão com banco estabelecida.');
+wss.on("connection", (ws) => {
+  console.log("Cliente conectado");
 
-        const PORT = process.env.NODE_PORT || 3000;
+  // Notifica entrada (sem histórico, apenas broadcast)
+  broadcast({
+    type: "system",
+    message: "Um usuário entrou no chat",
+    from: "Sistema",
+    id: Date.now(),
+  });
 
-        // --- IMPORTANTE: USAR "server.listen" E NÃO "app.listen" ---
-        server.listen(PORT, () => {
-            console.log(`API + WebSocket rodando na porta ${PORT}`);
-        });
+  ws.on("message", (msg) => {
+    const data = JSON.parse(msg.toString());
 
-    } catch (error) {
-        console.error('Erro ao criar servidor:', error.message);
+    if (data.type === "chat") {
+      // Mensagem de usuário
+      broadcast({
+        type: "chat",
+        from: data.from,
+        message: data.message,
+        id: Date.now(),
+      });
     }
+  });
+
+  ws.on("close", () => {
+    // Notifica saída
+    broadcast({
+      type: "system",
+      message: "Um usuário saiu do chat",
+      from: "Sistema",
+      id: Date.now(),
+    });
+  });
+});
+
+async function startServer() {
+  try {
+    await sequelize.authenticate();
+    console.log('Conexão com banco estabelecida.');
+
+    const PORT = process.env.NODE_PORT || 3000;
+    server.listen(PORT, () => {
+      console.log(`API + WebSocket rodando na porta ${PORT}`);
+    });
+
+  } catch (error) {
+    console.error('Erro ao criar servidor:', error.message);
+  }
 }
 
 startServer();

@@ -1,98 +1,38 @@
 import express from 'express';
-import db from '../../database/models/index.js';
+import db from '../../app/models/index.js';
+import getAlunos from '../../app/controllers/alunoController/getAluno.js';
+import getAlunoById from '../../app/controllers/alunoController/getAlunoById.js'
+import insertAluno from '../../app/controllers/alunoController/insertAluno.js'
+import updateAluno from '../../app/controllers/alunoController/updateAluno.js'
+import deleteAlunoById from '../../app/controllers/alunoController/deleteAluno.js'
+import authMiddleware from '../../app/middleware/auth.js';
+
 import { broadcast } from '../../server.js';
+import { type } from 'os';
 
 const router = express.Router();
 
-// GET /alunos
-router.get('/', async (req, res) => {
-  try {
-    const alunos = await db.Aluno.findAll();
-    res.json(alunos);
-  } catch (error) {
-    console.error('Erro ao buscar alunos:', error);
-    res.status(500).json({ error: 'Erro ao buscar alunos', details: error.message });
-  }
+//rotas protejudas com middleware
+router.get('/', authMiddleware, getAlunos);        // listar todos
+router.get('/:id', authMiddleware, getAlunoById);       // buscar por id
+router.post('/', authMiddleware, insertAluno);           // criar novo
+router.put('/:id', authMiddleware, updateAluno);        // atualizar existente
+router.delete('/:id', authMiddleware, deleteAlunoById);  // deletar por id
+
+//Broadcast no chat
+router.post("/", authMiddleware, async (req, res) => {
+    const aluno = await insertAluno(req, res);
+    broadcast({type: "aluno_criado", aluno});
 });
 
-// GET /alunos/:id
-router.get('/:id', async (req, res) => {
-  try {
-    const aluno = await db.Aluno.findByPk(req.params.id);
-    if (aluno) {
-      res.json(aluno);
-    } else {
-      res.status(404).json({ error: 'Aluno não encontrado' });
-    }
-  } catch (error) {
-    console.error('Erro ao buscar aluno por ID:', error);
-    res.status(500).json({ error: 'Erro ao buscar aluno', details: error.message });
-  }
+router.put("/:id", authMiddleware, async (req, res) => {
+  const aluno = await updateAluno(req, res);
+  broadcast({ type: "aluno_atualizado", aluno });
 });
 
-// POST /alunos
-router.post('/', async (req, res) => {
-  try {
-    const novoAluno = await db.Aluno.create(req.body);
-
-    // 🔥 ENVIA PARA TODOS NO WEBSOCKET
-    broadcast({
-      type: "aluno_criado",
-      data: novoAluno
-    });
-
-    res.status(201).json(novoAluno);
-  } catch (error) {
-    console.error('Erro ao criar aluno:', error);
-    res.status(400).json({ error: 'Erro ao criar aluno', details: error.message });
-  }
+router.delete("/:id", authMiddleware, async (req, res) => {
+  const aluno = await deleteAlunoById(req, res);
+  broadcast({ type: "aluno_removido", aluno });
 });
-
-
-// PUT /alunos/:id
-router.put('/:id', async (req, res) => {
-  try {
-    const aluno = await db.Aluno.findByPk(req.params.id);
-    if (aluno) {
-      await aluno.update(req.body);
-
-      broadcast({
-        type: "aluno_atualizado",
-        data: aluno
-      });
-
-      res.json(aluno);
-    } else {
-      res.status(404).json({ error: 'Aluno não encontrado' });
-    }
-  } catch (error) {
-    console.error('Erro ao atualizar aluno:', error);
-    res.status(400).json({ error: 'Erro ao atualizar aluno', details: error.message });
-  }
-});
-
-// DELETE /alunos/:id
-router.delete('/:id', async (req, res) => {
-  try {
-    const aluno = await db.Aluno.findByPk(req.params.id);
-    if (aluno) {
-      await aluno.destroy();
-
-      // 🔥 AVISA QUE FOI DELETADO
-      broadcast({
-        type: "aluno_deletado",
-        id: aluno.id
-      });
-
-      res.status(204).send();
-    } else {
-      res.status(404).json({ error: 'Aluno não encontrado' });
-    }
-  } catch (error) {
-    console.error('Erro ao deletar aluno:', error);
-    res.status(500).json({ error: 'Erro ao deletar aluno', details: error.message });
-  }
-});
-
 
 export default router;
