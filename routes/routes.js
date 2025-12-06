@@ -1,5 +1,15 @@
 import express from 'express';
+import api from './api.js';
 
+const router = express.Router();
+
+router.use(express.json());
+router.use('/api', api());   // todas as rotas da API ficam em /api
+
+export default router;
+
+
+/*
 import AlunoRoutes from './api/Alunos.js';
 import ProfessorRoutes from './api/Professor.js';
 import AdministradorRoutes from './api/Administrador.js';
@@ -22,4 +32,5 @@ router.use('/pagamentos', PagamentoRoutes);
 router.use('/usuarios', UsuarioRoutes);
 router.use('/chatbot', ChatBotRoutes);
 
-export default router;
+export default router
+*/

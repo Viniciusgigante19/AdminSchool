@@ -1,31 +1,44 @@
-// /src/pages/TeacherDashboardPage.tsx
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import TeacherSidebar from "./components/Layout/teacherSidebar";
+import Chat from "../../component/chat/Chat";
 
 export default function TeacherDashboardPage() {
-  const user = {
-    name: "Carlos Pereira",
-    role: "Professor",
-    avatar: "https://i.pravatar.cc/150?img=32",
-  };
+  const [user, setUser] = useState<any>(null);
+  const [presenceSummary, setPresenceSummary] = useState<any>(null);
+  const [studentsSummary, setStudentsSummary] = useState<any>(null);
+  const [recentActivities, setRecentActivities] = useState<any[]>([]);
 
-  const presenceSummary = {
-    today: 18,
-    totalStudents: 20,
-    weekPercent: 90,
-    monthPercent: 95,
-  };
+  // Buscar dados da API
+  useEffect(() => {
+    // Usuário logado
+    fetch("http://localhost:3000/api/usuarios/me") // ajuste o endpoint conforme seu backend
+      .then((res) => res.json())
+      .then((data) => setUser(data))
+      .catch((err) => console.error("Erro ao buscar usuário:", err));
 
-  const studentsSummary = {
-    total: 20,
-    absentsToday: 2,
-  };
+    // Presenças
+    fetch("http://localhost:3000/api/teacher/presence-summary")
+      .then((res) => res.json())
+      .then((data) => setPresenceSummary(data))
+      .catch((err) => console.error("Erro ao buscar presenças:", err));
 
-  const recentActivities = [
-    { id: "t1", title: "Matemática - Frações", date: "2025-10-10" },
-    { id: "t2", title: "Ciências - Plantas", date: "2025-10-08" },
-    { id: "t3", title: "História do Brasil", date: "2025-10-05" },
-  ];
+    // Alunos
+    fetch("http://localhost:3000/api/teacher/students-summary")
+      .then((res) => res.json())
+      .then((data) => setStudentsSummary(data))
+      .catch((err) => console.error("Erro ao buscar alunos:", err));
+
+    // Atividades
+    fetch("http://localhost:3000/api/teacher/recent-activities")
+      .then((res) => res.json())
+      .then((data) => setRecentActivities(data))
+      .catch((err) => console.error("Erro ao buscar atividades:", err));
+  }, []);
+
+  if (!user || !presenceSummary || !studentsSummary) {
+    return <p className="p-8">Carregando dados...</p>;
+  }
 
   return (
     <div className="flex min-h-screen bg-gray-100">
@@ -35,7 +48,7 @@ export default function TeacherDashboardPage() {
       {/* Conteúdo principal */}
       <main className="flex-1 p-8">
         <header className="mb-6">
-          <h1 className="text-3xl font-bold">Bem-vindo, {user.name}</h1>
+          <h1 className="text-3xl font-bold">Bem-vindo, {user.username || user.name}</h1>
           <p className="text-gray-600">Resumo rápido das suas turmas</p>
         </header>
 
@@ -60,11 +73,6 @@ export default function TeacherDashboardPage() {
                   Mês: <span className="font-medium">{presenceSummary.monthPercent}%</span>
                 </p>
               </div>
-              <div className="mt-4">
-                <span className="inline-block text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded">
-                  Ver detalhes
-                </span>
-              </div>
             </article>
           </Link>
 
@@ -85,11 +93,6 @@ export default function TeacherDashboardPage() {
                   ))}
                 </ul>
               </div>
-              <div className="mt-4">
-                <span className="inline-block text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded">
-                  Ver todas
-                </span>
-              </div>
             </article>
           </Link>
 
@@ -109,11 +112,6 @@ export default function TeacherDashboardPage() {
                   <span className="font-medium text-red-600">{studentsSummary.absentsToday}</span>
                 </p>
               </div>
-              <div className="mt-4">
-                <span className="inline-block text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded">
-                  Ver lista
-                </span>
-              </div>
             </article>
           </Link>
         </section>
@@ -129,6 +127,11 @@ export default function TeacherDashboardPage() {
           <p className="text-gray-500 mt-2">
             Tire dúvidas rápidas sobre presenças, atividades e informações da turma.
           </p>
+        </div>
+
+        {/* Chat integrado */}
+        <div className="mt-10">
+          <Chat user={user} />
         </div>
       </main>
     </div>
