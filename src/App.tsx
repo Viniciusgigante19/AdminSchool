@@ -7,8 +7,6 @@ import ListUsuarios from "./pages/usuarios/CrudUsuarios";
 import Chat from "./pages/component/chat/Chat";
 
 export default function App() {
-  const token = localStorage.getItem("token");
-  const role = localStorage.getItem("role");
   const username = localStorage.getItem("username") || "Anônimo";
 
   return (
@@ -16,13 +14,11 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<LoginPage />} />
-
-        <Route path="/dashboard/admin" element={token && role==="admin" ? <DashboardAdmin/> : <Navigate to="/login"/>}/>
-        <Route path="/dashboard/student" element={token && role==="student" ? <DashboardStudent/> : <Navigate to="/login"/>}/>
-        <Route path="/dashboard/teacher" element={token && role==="teacher" ? <DashboardTeacher/> : <Navigate to="/login"/>}/>
-        <Route path="/dashboard/users" element={token && role==="admin" ? <ListUsuarios/> : <Navigate to="/login"/>}/>
-        <Route path="/chat" element={token ? <Chat user={{username}}/> : <Navigate to="/login"/>}/>
-
+        <Route path="/dashboard/admin" element={<DashboardAdmin />} />
+        <Route path="/dashboard/student" element={<DashboardStudent />} />
+        <Route path="/dashboard/teacher" element={<DashboardTeacher />} />
+        <Route path="/dashboard/users" element={<ListUsuarios />} />
+        <Route path="/chat" element={<Chat user={{ username }} />} />
         <Route path="*" element={<div>Página não encontrada</div>} />
       </Routes>
     </BrowserRouter>

@@ -67,7 +67,7 @@ docker compose exec api-node npm run seed
 - curl -X POST http://localhost:3000/api/usuarios \
 -H "Content-Type: application/json" \
 -d '{
-  "username": "teste",
+  "username": "teste3",
   "senha": "123456",
   "tipo_usuario": "administrador",
   "nivel_acesso": "Total",

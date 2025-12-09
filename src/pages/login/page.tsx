@@ -22,16 +22,21 @@ export default function LoginPage() {
         alert("Login bem-sucedido!");
         console.log("Usuário autenticado:", data);
 
+        // salvar dados no localStorage
         localStorage.setItem("token", data.token);
-        localStorage.setItem("username", data.username); // importante para o Chat
-        localStorage.setItem("tipo_usuario", data.tipo_usuario);
+        localStorage.setItem("username", data.username);
+        localStorage.setItem("role", data.tipo_usuario); // administrador | professor | aluno
+        localStorage.setItem("nivel_acesso", data.nivel_acesso);
 
+        // redirecionar para o dashboard correto
         if (data.tipo_usuario === "administrador") {
-          navigate("localhost:5/dashboard/admin");
+          navigate("/dashboard/admin");   // 👈 minúsculo
         } else if (data.tipo_usuario === "professor") {
-          navigate("/dashboard/teacher");
+          navigate("/dashboard/teacher"); // 👈 minúsculo
         } else if (data.tipo_usuario === "aluno") {
-          navigate("/dashboard/student");
+          navigate("/dashboard/student"); // 👈 minúsculo
+        } else {
+          navigate("/login"); // fallback
         }
       } else {
         alert(data.error || "Falha no login");

@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [senha, setSenha] = useState("");
 
@@ -20,18 +22,21 @@ export default function LoginPage() {
         alert("Login bem-sucedido!");
         console.log("Usuário autenticado:", data);
 
-        // 👉 salvar token no localStorage
-        if (data.token) {
-          localStorage.setItem("token", data.token);
-        }
+        // salvar dados no localStorage
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("username", data.username);
+        localStorage.setItem("role", data.tipo_usuario); // administrador | professor | aluno
+        localStorage.setItem("nivel_acesso", data.nivel_acesso);
 
-        // 👉 redirecionar para o dashboard correto
+        // redirecionar para o dashboard correto
         if (data.tipo_usuario === "administrador") {
-          window.location.href = "/Dashboard/admin";
+          navigate("/dashboard/admin");   // 👈 minúsculo
         } else if (data.tipo_usuario === "professor") {
-          window.location.href = "/Dashboard/teacher";
+          navigate("/dashboard/teacher"); // 👈 minúsculo
         } else if (data.tipo_usuario === "aluno") {
-          window.location.href = "/Dashboard/student";
+          navigate("/dashboard/student"); // 👈 minúsculo
+        } else {
+          navigate("/login"); // fallback
         }
       } else {
         alert(data.error || "Falha no login");
