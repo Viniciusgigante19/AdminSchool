@@ -1,4 +1,4 @@
-FROM node:20
+FROM node:20-alpine
 
 WORKDIR /app
 
@@ -6,7 +6,7 @@ WORKDIR /app
 COPY package.json package-lock.json* ./
 
 # Instala dependências (vai instalar dentro do volume se ele existir no compose)
-RUN npm install
+RUN npm install --production
 
 # Agora copia o restante do código
 COPY . .

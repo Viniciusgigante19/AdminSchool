@@ -1,0 +1,32 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependências locais (serão instaladas dentro do container)
+node_modules
+
+# Builds e artefatos
+dist
+dist-ssr
+build
+
+# Configurações locais
+*.local
+
+# Diretórios de editor/IDE
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+
+# Arquivos de projeto que não precisam ir para o container
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

@@ -22,6 +22,7 @@ services:
       - "5173:80"
     depends_on:
       - vite-app
+      - api-node
     networks:
       - app-network
 
