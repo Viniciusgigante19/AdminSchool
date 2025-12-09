@@ -1,19 +1,22 @@
 import Chat from "../../component/chat/Chat";
+import CrudUsuarios from "../../usuarios/CrudUsuarios";
 
 export default function DashboardPage() {
   const user = JSON.parse(localStorage.getItem("user") || "{}");
-  console.log(user);
 
   return (
     <div className="flex min-h-screen bg-gray-100">
       {/* Menu lateral */}
       <aside className="w-64 bg-white shadow-md p-6">
         <div className="flex flex-col items-center mb-8">
-          <img
-            src={user.avatar}
-            alt="Avatar"
-            className="w-20 h-20 rounded-full mb-4"
-          />
+          {user.avatar && (
+            <img
+              src={user.avatar}
+              alt="Avatar"
+              className="w-20 h-20 rounded-full mb-4"
+            />
+          )}
+          
           <h2 className="text-xl font-bold">{user.username || user.name}</h2>
           <span className="text-gray-500">{user.role}</span>
         </div>
@@ -71,6 +74,13 @@ export default function DashboardPage() {
           atividades.
         </p>
 
+        {/* CRUD de Usuários */}
+        {user.role === "Admin" && (
+          <div className="mb-10">
+            <CrudUsuarios />
+          </div>
+        )}
+
         {/* Cards de módulos */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <a
@@ -103,7 +113,7 @@ export default function DashboardPage() {
             </p>
           </a>
 
-          {user.role === "Admin" && (
+          {user.role === "admin" && (
             <a
               href="/dashboard/users"
               className="bg-white shadow rounded-lg p-6 hover:shadow-lg transition"

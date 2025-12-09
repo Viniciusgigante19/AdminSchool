@@ -1,8 +1,8 @@
-// src/pages/index.tsx
-// uso de useState para capturar os dados de login
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [senha, setSenha] = useState("");
 
@@ -21,17 +21,18 @@ export default function LoginPage() {
       if (response.ok) {
         alert("Login bem-sucedido!");
         console.log("Usuário autenticado:", data);
-        // 👉 aqui você pode salvar token no localStorage e redirecionar para o dashboard
-        // localStorage.setItem("token", data.token);
-        // window.location.href = "/dashboard/admin";
-        if (data.tipo_usuario === "administrador") {
-          window.location.href = "/Dashboard/admin";
-        } else if (data.tipo_usuario === "professor") {
-          window.location.href = "/Dashboard/teacher";
-        } else if (data.tipo_usuario === "aluno") {
-          window.location.href = "/Dashboard/student";
-        }
 
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("username", data.username); // importante para o Chat
+        localStorage.setItem("tipo_usuario", data.tipo_usuario);
+
+        if (data.tipo_usuario === "administrador") {
+          navigate("localhost:5/dashboard/admin");
+        } else if (data.tipo_usuario === "professor") {
+          navigate("/dashboard/teacher");
+        } else if (data.tipo_usuario === "aluno") {
+          navigate("/dashboard/student");
+        }
       } else {
         alert(data.error || "Falha no login");
       }
@@ -87,4 +88,3 @@ export default function LoginPage() {
     </div>
   );
 }
-

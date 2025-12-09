@@ -1,41 +1,18 @@
-// src/pages/chat/Chat.tsx
-import { useEffect, useState } from "react";
-import type { User, ChatMessage } from "./Chat.types";
+import { useState } from "react";
+import type { User } from "./Chat.types";
+import { useWebSocket } from "../../hooks/useWebSocket";
 
 export default function Chat({ user }: { user: User }) {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
-  const [ws, setWs] = useState<WebSocket | null>(null);
+  const { messages, sendMessage } = useWebSocket("ws://localhost:3000"); // ajuste a porta conforme seu backend
 
-  useEffect(() => {
-    const socket = new WebSocket("ws://localhost:3000"); // ajuste porta conforme backend
-    setWs(socket);
-
-    socket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-
-  
-
-      if (data.type === "chat") {
-        setMessages((prev) => [
-          ...prev,
-          { id: Date.now(), from: data.from, message: data.message, type: "chat" },
-        ]);
-      }
-    };
-
-    return () => socket.close();
-  }, []);
-
-  const sendMessage = () => {
-    if (ws && input.trim()) {
-      ws.send(
-        JSON.stringify({
-          type: "chat",
-          from: user.username,
-          message: input,
-        })
-      );
+  const handleSend = () => {
+    if (input.trim()) {
+      sendMessage({
+        from: user.username,
+        message: input,
+        type: "chat",
+      });
       setInput("");
     }
   };
@@ -59,7 +36,7 @@ export default function Chat({ user }: { user: User }) {
         />
         <button
           className="bg-blue-500 text-white px-4 py-2 rounded"
-          onClick={sendMessage}
+          onClick={handleSend}
         >
           Enviar
         </button>
