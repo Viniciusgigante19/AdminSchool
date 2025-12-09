@@ -1,22 +1,19 @@
-import express from 'express';
 import db from '../../models/index.js';
 
-const router = express.Router();
-
-// DELETE /usuarios/:id - remove usuário
-router.delete('/:id', async (req, res) => {
+export default async function deleteUsuarioById(req, res) {
   try {
-    const usuario = await db.Usuario.findByPk(req.params.id);
-    if (usuario) {
-      await usuario.destroy();
-      res.status(204).send();
-    } else {
-      res.status(404).json({ error: 'Usuário não encontrado' });
+    const { id } = req.params;
+
+    const usuario = await db.Usuario.findByPk(id);
+    if (!usuario) {
+      return res.status(404).json({ error: 'Usuário não encontrado' });
     }
+
+    await usuario.destroy();
+
+    return res.json({ message: 'Usuário removido com sucesso' });
   } catch (error) {
     console.error('Erro ao deletar usuário:', error);
-    res.status(500).json({ error: 'Erro ao deletar usuário', details: error.message });
+    return res.status(500).json({ error: 'Erro ao deletar usuário' });
   }
-});
-
-export default router;
+}

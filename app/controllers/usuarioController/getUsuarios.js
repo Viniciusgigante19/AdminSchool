@@ -1,18 +1,13 @@
-import express from 'express';
 import db from '../../models/index.js';
 
-const router = express.Router();
-
-
-// GET /usuarios - lista todos os usuários
-router.get('/', async (req, res) => {
+export default async function getUsuarios(req, res) {
   try {
-    const usuario = await db.Usuario.findAll();
-    res.json(usuario);
+    const usuarios = await db.Usuario.findAll({
+      attributes: { exclude: ['senha'] } // não expõe senha
+    });
+    res.json(usuarios);
   } catch (error) {
-    console.error('Erro ao buscar usuários:', error);
-    res.status(500).json({ error: 'Erro ao buscar usuários', details: error.message });
+    console.error('Erro ao buscar usuarios:', error);
+    res.status(500).json({ error: 'Erro ao buscar usuarios', details: error.message });
   }
-});
-
-export default router;
+}

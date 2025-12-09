@@ -1,11 +1,18 @@
-// middleware/auth.js
+// 📂app/middleware/auth.js
 import jwt from "jsonwebtoken";
 
 export default function authMiddleware(req, res, next) {
-  const token = req.headers["authorization"];
+  const authHeader = req.headers["authorization"];
 
-  if (!token) {
+  if (!authHeader) {
     return res.status(401).json({ error: "Token não fornecido" });
+  }
+
+  // O header vem como "Bearer token"
+  const [scheme, token] = authHeader.split(" ");
+
+  if (scheme !== "Bearer" || !token) {
+    return res.status(401).json({ error: "Formato de token inválido" });
   }
 
   try {
