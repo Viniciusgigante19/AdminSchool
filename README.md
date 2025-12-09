@@ -52,8 +52,6 @@ docker compose exec api-node npm run seed
  - PASSO NECESSÁRIO: executar migration e seeds novamente
 
 
-
-
 ## nginx server
  - http://localhost:5173/login
  - http://localhost:5173/dashboard/student
@@ -61,6 +59,39 @@ docker compose exec api-node npm run seed
 
 ## api-node
  - http://localhost:3000/api
+
+
+# Passo a passo para testar o projeto:
+
+
+## criar um usuario com nivel de acesso ADMIN
+- curl -X POST http://localhost:3000/api/usuarios \
+-H "Content-Type: application/json" \
+-d '{
+  "username": "teste",
+  "senha": "123456",
+  "tipo_usuario": "administrador",
+  "nivel_acesso": "Total",
+  "status": "Ativo"
+}'
+
+
+## login com usuario ADMIN
+- nome: joão
+- senha: admin
+
+## CRUD de usuarios (admin, professor ou aluno). Cada tipo de usuario tem seu dashboard e nivel de acesso.
+
+# usuario:
+- nome: vitor
+- 
+
+
+
+
+
+
+
 
 
 
@@ -107,8 +138,9 @@ curl -X POST http://localhost:3000/api/usuarios \
 -d '{
   "username":"wagner",
   "senha":"123456",
-  "tipo_usuario":"administrador",
-  "nivel_acesso":"admin"
+  "tipo_usuario":"Administrador",
+  "nivel_acesso":"Total"
+  "status":""Ativo"
 }'
 
 # PUT - atualizar usuário por ID
