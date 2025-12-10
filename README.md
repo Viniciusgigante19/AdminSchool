@@ -53,10 +53,7 @@ docker compose exec api-node npm run seed
 
 ## nginx server (algumas rotas)
 ## Rotas importantes:
- - http://localhost:5173/login
  - http://localhost:5173/dashboard/users
-
-
 
 ## api-node
  - http://localhost:3000/api 
@@ -78,8 +75,10 @@ docker compose exec api-node npm run seed
   "status": "Ativo"
 }'
 
-
-## login com usuario ADMIN
+## Acesse:
+ - http://localhost:5173/login
+   
+## login com usuario ADMIN (redirecionamento para os dashboard desabilitado)
 - nome: nome criado
 - senha: senha criada
 
