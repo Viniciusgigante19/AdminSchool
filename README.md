@@ -51,19 +51,23 @@ docker compose exec api-node npm run seed
  - PASSO NECESSÁRIO: executar migration e seeds novamente
 
 
-## nginx server
+## nginx server (algumas rotas)
+## Rotas importantes:
  - http://localhost:5173/login
- - http://localhost:5173/dashboard/student
- - http://localhost:5173/dashboard/admin
+ - http://localhost:5173/dashboard/users
+
+
 
 ## api-node
- - http://localhost:3000/api
+ - http://localhost:3000/api 
+
+# para acessar o banco de dados pelo navegador acesse :
+ - http://localhost:3000/api/usuarios
+ - http://localhost:3000/api/alunos
 
 
-# Passo a passo para testar o projeto:
+# Para testar o login crie um usuario peno terminal (administrador, professor e aluno):
 
-
-## criar um usuario com nivel de acesso ADMIN
 - curl -X POST http://localhost:3000/api/usuarios \
 -H "Content-Type: application/json" \
 -d '{
@@ -76,14 +80,8 @@ docker compose exec api-node npm run seed
 
 
 ## login com usuario ADMIN
-- nome: joão
-- senha: admin
-
-## CRUD de usuarios (admin, professor ou aluno). Cada tipo de usuario tem seu dashboard e nivel de acesso.
-
-# usuario:
-- nome: vitor
-- 
+- nome: nome criado
+- senha: senha criada
 
 
 
